@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tom x Mickaël Wu TikTok — Espace membres</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">Tom x Mickaël Wu TikTok</div>
+    <div class="user-chip" id="userChip" style="display:none">
+      <img id="userAvatar" src="" alt="" />
+      <span id="userName"></span>
+      <span class="points">· <span id="userPoints">0</span> pts</span>
+      <a href="#" class="logout-btn" id="logoutBtn">Déconnexion</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="planning">Planning</button>
+      <button class="tab" data-tab="rediffs">Rediffs</button>
+      <button class="tab" data-tab="appels">Appels 1to1</button>
+      <button class="tab" data-tab="points">Gagner des points</button>
+      <button class="tab" data-tab="admin" id="adminTab" style="display:none">Admin</button>
+    </div>
+
+    <!-- PLANNING -->
+    <section class="panel active" id="panel-planning">
+      <h2 class="panel-title">Planning des coachings</h2>
+      <p class="panel-sub">Toutes les sessions de coaching en groupe de la semaine.</p>
+      <div class="grid" id="planningGrid"></div>
+    </section>
+
+    <!-- REDIFFS -->
+    <section class="panel" id="panel-rediffs">
+      <h2 class="panel-title">Rediffusions</h2>
+      <p class="panel-sub">Retrouve ici tous les coachings de groupe passés.</p>
+      <div id="rediffsList"></div>
+      <div id="noRediffs" class="hint" style="display:none">Aucune rediff pour l'instant.</div>
+    </section>
+
+    <!-- APPELS 1TO1 -->
+    <section class="panel" id="panel-appels">
+      <h2 class="panel-title">Appels 1to1</h2>
+      <p class="panel-sub">Réserve un appel privé avec zayoon.</p>
+      <div id="appelsBody"></div>
+    </section>
+
+    <!-- POINTS -->
+    <section class="panel" id="panel-points">
+      <h2 class="panel-title">Gagner des points</h2>
+      <p class="panel-sub">20 points = 1 appel 1to1 supplémentaire.</p>
+
+      <div class="points-hero">
+        <div class="amount" id="pointsBig">0</div>
+        <div class="label">points</div>
+      </div>
+
+      <div id="cooldownBanner" class="hint" style="display:none"></div>
+
+      <div class="two-col" id="uploadZone">
+        <label class="upload-card" id="cardScreen">
+          <h4>📸 Screenshot de dashboard</h4>
+          <p>Envoie un screen de tes résultats TikTok.</p>
+          <div class="reward">+10 points</div>
+          <input type="file" accept="image/*" id="uploadScreen" hidden />
+        </label>
+        <label class="upload-card" id="cardVideo">
+          <h4>🎥 Vidéo avec ta tête</h4>
+          <p>Toi (floutée ou non) à côté du tel avec les dashboards.</p>
+          <div class="reward">+20 points</div>
+          <input type="file" accept="video/*" id="uploadVideo" hidden />
+        </label>
+      </div>
+
+      <p style="color:var(--text-dim); font-size:13px; margin-top:16px; text-align:center">
+        Limite : 1 preuve toutes les 2 semaines.
+      </p>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="panel" id="panel-admin">
+      <h2 class="panel-title">Admin — Rediffs</h2>
+      <p class="panel-sub">Ajoute les liens des coachings de groupe.</p>
+
+      <div class="card" style="margin-bottom:24px">
+        <div class="form-field">
+          <label>Titre</label>
+          <input id="newTitle" placeholder="Ex : Coaching hook TikTok - 12 avril" />
+        </div>
+        <div class="form-field">
+          <label>Lien (YouTube, Drive, etc.)</label>
+          <input id="newUrl" placeholder="https://..." />
+        </div>
+        <div class="form-field">
+          <label>Coach (optionnel)</label>
+          <select id="newCoach">
+            <option value="">—</option>
+            <option value="frak">frak</option>
+            <option value="zayoon">zayoon</option>
+          </select>
+        </div>
+        <button class="btn btn-full" id="addRediffBtn">Ajouter la rediff</button>
+      </div>
+
+      <div class="card">
+        <h3>💥 Message de motivation</h3>
+        <p>Envoie un message de motivation aléatoire dans le salon général tout de suite.</p>
+        <button class="btn btn-accent btn-full" style="margin-top:16px" id="triggerMotivBtn">Envoyer maintenant</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal popup niche -->
+  <div class="modal-backdrop" id="nicheModal">
+    <div class="modal">
+      <h3>👋 Bienvenue</h3>
+      <p>As-tu <strong>déjà fait ton appel 1to1 de découverte de niche</strong> avec zayoon ?</p>
+      <div class="actions">
+        <button class="btn btn-ghost" id="nicheNo">Non, pas encore</button>
+        <button class="btn" id="nicheYes">Oui, déjà fait</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal booking -->
+  <div class="modal-backdrop" id="bookingModal">
+    <div class="modal">
+      <h3 id="bookingTitle">Réserver un appel 1to1</h3>
+      <p id="bookingSub"></p>
+      <div class="form-field">
+        <label>Raison de l'appel</label>
+        <textarea id="bookReason" rows="3" placeholder="Ex : Je bloque sur mon hook, mes vues stagnent à 3k..."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Numéro WhatsApp (avec indicatif)</label>
+        <input id="bookWhatsapp" placeholder="+33 6 12 34 56 78" />
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="bookCancel">Annuler</button>
+        <button class="btn" id="bookConfirm">Confirmer la réservation</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
