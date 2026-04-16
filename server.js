@@ -294,7 +294,7 @@ app.get('/admin.html', (req, res, next) => {
 // ---------- Start ----------
 (async () => {
   try { await bot.start(); } catch (e) { console.error('Bot start failed:', e.message); }
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀 Site en ligne : http://localhost:${PORT}\n`);
   });
 })();
